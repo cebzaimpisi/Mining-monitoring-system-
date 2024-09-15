@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ikwezi Mining Workers Health Monitoring System</title>
+    <style>
+        body {
+            Font-family: Arial, sans-serif;
+            Background-color: #f4f4f4;
+            Margin: 0;
+            Padding: 20px;
+        }
+
+        .dashboard {
+            Max-width: 1000px;
+            Margin: 0 auto;
+            Background: #fff;
+            Padding: 20px;
+            Border-radius: 8px;
+            Box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            Text-align: center;
+            Margin-bottom: 20px;
+        }
+
+        .search-bar {
+            Display: flex;
+            Margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            Width: 100%;
+            Padding: 10px;
+            Border: 1px solid #ccc;
+            Border-radius: 4px;
+        }
+
+        .worker-health-list {
+            Width: 100%;
+            Border-collapse: collapse;
+            Margin-bottom: 20px;
+        }
+
+        .worker-health-list th, .worker-health-list td {
+            Padding: 12px;
+            Border: 1px solid #ccc;
+            Text-align: left;
+        }
+
+        .worker-health-list th {
+            Background-color: #007bff;
+            Color: white;
+        }
+
+        .worker-health-list td {
+            Background-color: #f9f9f9;
+        }
+
+        .status {
+            Padding: 5px 10px;
+            Border-radius: 4px;
+            Color: white;
+        }
+
+        .normal {
+            Background-color: #28a745;
+        }
+
+        .alert {
+            Background-color: #dc3545;
+        }
+
+        .actions {
+            Text-align: center;
+        }
+
+        .actions button {
+            Padding: 8px 12px;
+            Margin: 5px;
+            Border: none;
+            Border-radius: 4px;
+            Cursor: pointer;
+            Background-color: #007bff;
+            Color: white;
+        }
+
+        .actions button.update {
+            Background-color: #ffc107;
+        }
+
+        .highlight {
+            Background-color: #fff3cd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h1>Mining Workers Health Monitoring System</h1>
+
+    <!--Search Bar--> 
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search worker by name or job title">
+    </div>
+
+    <table class="worker-health-list" id="worker-health-list">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Job Title</th>
+                <th>Heart Rate (bpm)</th>
+                <th>Blood Pressure (mmHg)</th>
+                <th>Temperature (°C)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--Worker health data will be dynamically inserted here by JavaScript--> 
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const workersHealth = [
+        { id: 1, name: 'Mcambi Succses', jobTitle: 'Miner', heartRate: 72, bloodPressure: '120/80', temperature: 36.6, status: 'Normal' },
+        { id: 2, name: 'Madonsela Samkelo', jobTitle: 'Supervisor', heartRate: 88, bloodPressure: '130/85', temperature: 37.2, status: 'Normal' },
+        { id: 3, name: 'Cebekhulu Khulekani', jobTitle: 'Safety Officer', heartRate: 110, bloodPressure: '150/95', temperature: 38.1, status: 'Alert' },
+        { id: 4, name: 'Nene Thobisani', jobTitle: 'Engineer', heartRate: 68, bloodPressure: '118/78', temperature: 36.5, status: 'Normal' },
+        { id: 5, name: 'Nkosi Sizwe', jobTitle: 'Technician', heartRate: 95, bloodPressure: '140/90', temperature: 37.8, status: 'Alert' }
+    ];
+
+    function loadWorkersHealth() {
+        const workerHealthList = document.getElementById('worker-health-list').getElementsByTagName('tbody')[0];
+        workerHealthList.innerHTML = '';
+
+        workersHealth.forEach(worker => {
+            const row = workerHealthList.insertRow();
+            row.className = worker.status === 'Alert' ? 'highlight' : '';
+            row.innerHTML = `
+                <td>${worker.id}</td>
+                <td>${worker.name}</td>
+                <td>${worker.jobTitle}</td>
+                <td>${worker.heartRate}</td>
+                <td>${worker.bloodPressure}</td>
+                <td>${worker.temperature}</td>
+                <td><span class="status ${worker.status === 'Normal' ? 'normal' : 'alert'}">${worker.status}</span></td>
+            `;
+        });
+    }
+
+    document.getElementById('search-input').addEventListener('input', function() {
+        const searchValue = this.value.toLowerCase();
+        const filteredWorkers = workersHealth.filter(worker =>
+            worker.name.toLowerCase().includes(searchValue) ||
+            worker.jobTitle.toLowerCase().includes(searchValue)
+        );
+
+        const workerHealthList = document.getElementById('worker-health-list').getElementsByTagName('tbody')[0];
+        workerHealthList.innerHTML = '';
+
+        filteredWorkers.forEach(worker => {
+            const row = workerHealthList.insertRow();
+            row.className = worker.status === 'Alert' ? 'highlight' : '';
+            row.innerHTML = `
+                <td>${worker.id}</td>
+                <td>${worker.name}</td>
+                <td>${worker.jobTitle}</td>
+                <td>${worker.heartRate}</td>
+                <td>${worker.bloodPressure}</td>
+                <td>${worker.temperature}</td>
+                <td><span class="status ${worker.status === 'Normal' ? 'normal' : 'alert'}">${worker.status}</span></td>
+            `;
+        });
+    });
+
+    window.onload = loadWorkersHealth;
+</script>
+
+</body>
+</html>
+
